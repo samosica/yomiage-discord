@@ -1,0 +1,12 @@
+**/*
+!src
+!src/**/*
+!.eslintrc.js
+!.gitignore
+!LICENSE
+!package-lock.json
+!package.json
+!README.md
+!prettier.config.js
+!tsconfig.eslint.json
+!tsconfig.json
