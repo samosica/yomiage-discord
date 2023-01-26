@@ -62,5 +62,5 @@ yomiage-discordはDiscordに投稿されたメッセージを合成音声で読�
 7. `/yomiage stop`と入力すると読み上げ機能が無効になる。無効にするのはどのチャンネルからでもできる
 
 ## 工夫点 (備忘録)
-- 複数のコメントの読み上げを同時に進める（非同期処理）
+- 複数のコメントの音声化を同時に進める（非同期処理）
 - 音声が中断されないようにする。[discord.js](https://discord.js.org/#/)において音声を再生するには[`AudioPlayer.play`メソッド](https://discord.js.org/#/docs/voice/main/class/AudioPlayer?scrollTo=play)を使うのですが、音声を再生中にこのメソッドを呼び出すとその音声は中断され、新しい音声が再生されてしまいます。これを防ぐためにバッファ付きの音声再生関数を作成しています（[`src/utilities.ts`](src/utilities.ts)の`attachBufferToPlay`関数）
