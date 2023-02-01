@@ -220,16 +220,24 @@ const showVoiceChangeMessage = async (
 export const onSelectVoice = async (
     interaction: StringSelectMenuInteraction,
 ) => {
+    const [voiceId] = interaction.values;
+    const voiceDesc = getAvailableVoiceDescriptions().find(
+        ({ id }) => id === voiceId,
+    );
+    if (voiceDesc === undefined) {
+        throw new Error("unexpected error");
+    }
+
     await interaction.update({
-        content: "読み上げのスタイルを変えています…",
+        content: `読み上げのスタイルを${voiceDesc.name}に変えています…`,
         components: [],
     });
 
-    const [voiceId] = interaction.values;
+    console.info(`change the voice: ${voiceId}`);
     changeVoice(voiceId);
 
     await interaction.editReply({
-        content: "読み上げのスタイルが変わりました",
+        content: `読み上げのスタイルを${voiceDesc.name}に変えました`,
     });
 };
 
