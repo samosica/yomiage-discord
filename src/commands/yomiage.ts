@@ -22,7 +22,7 @@ const buildNormalMessageHandler = (
     play: (resourceRetrieval: Promise<AudioResource | null>) => Promise<void>,
 ) => {
     const messageCount: Record<string, number> = {};
-    const MAX_MESSAGE_COUNT = 3;
+    const MAX_MESSAGE_COUNT = 100;
     const MAX_MESSAGE_LENGTH = 300;
 
     const handler = async (message: Message) => {
