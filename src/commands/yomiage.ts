@@ -1,7 +1,10 @@
 import {
+    ActionRowBuilder,
     ChatInputCommandInteraction,
     Message,
     SlashCommandBuilder,
+    StringSelectMenuBuilder,
+    StringSelectMenuInteraction,
 } from "discord.js";
 import {
     AudioResource,
@@ -11,9 +14,9 @@ import {
     joinVoiceChannel,
     VoiceConnectionStatus,
 } from "@discordjs/voice";
-import { textToSpeech } from "../text-to-speech/google";
 import { attachBufferToPlay } from "../utilities";
 import { askGPT3 } from "../gpt-3";
+import { changeVoice, getAvailableVoiceDescriptions, getVoice } from "../voice";
 
 const buildNormalMessageHandler = (
     play: (resourceRetrieval: Promise<AudioResource | null>) => Promise<void>,
@@ -37,7 +40,8 @@ const buildNormalMessageHandler = (
             return;
         }
 
-        const retrieval = textToSpeech(message.content).catch((e) => {
+        const voice = getVoice();
+        const retrieval = voice.speak(message.content).catch((e) => {
             console.error(e);
             return null;
         });
@@ -80,7 +84,8 @@ const buildMentionMessageHandler = (
                 const response = await askGPT3(prompt);
                 await message.reply(response);
 
-                const resource = await textToSpeech(response);
+                const voice = getVoice();
+                const resource = await voice.speak(response);
                 return resource;
             } catch (e) {
                 console.error(e);
@@ -184,6 +189,58 @@ const stopYomiage = async (interaction: ChatInputCommandInteraction) => {
     });
 };
 
+export const VoiceChangeMessageComponents = {
+    VoiceSelectMenu: "voice-select-menu",
+} as const;
+
+const showVoiceChangeMessage = async (
+    interaction: ChatInputCommandInteraction,
+) => {
+    const options = getAvailableVoiceDescriptions().map(({ id, name }) => ({
+        label: name,
+        value: id,
+    }));
+    const selectMenuRow =
+        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+            new StringSelectMenuBuilder()
+                .setCustomId(VoiceChangeMessageComponents.VoiceSelectMenu)
+                .setPlaceholder("声の候補")
+                .addOptions(options)
+                .setMinValues(1)
+                .setMaxValues(1),
+        );
+
+    await interaction.reply({
+        ephemeral: true,
+        content: "どの声で読み上げましょうか？",
+        components: [selectMenuRow],
+    });
+};
+
+export const onSelectVoice = async (
+    interaction: StringSelectMenuInteraction,
+) => {
+    const [voiceId] = interaction.values;
+    const voiceDesc = getAvailableVoiceDescriptions().find(
+        ({ id }) => id === voiceId,
+    );
+    if (voiceDesc === undefined) {
+        throw new Error("unexpected error");
+    }
+
+    await interaction.update({
+        content: `読み上げのスタイルを${voiceDesc.name}に変えています…`,
+        components: [],
+    });
+
+    console.info(`change the voice: ${voiceId}`);
+    changeVoice(voiceId);
+
+    await interaction.editReply({
+        content: `読み上げのスタイルを${voiceDesc.name}に変えました`,
+    });
+};
+
 const onYomiage = async (interaction: ChatInputCommandInteraction) => {
     switch (interaction.options.getSubcommand()) {
         case "start": {
@@ -192,6 +249,10 @@ const onYomiage = async (interaction: ChatInputCommandInteraction) => {
         }
         case "stop": {
             await stopYomiage(interaction);
+            break;
+        }
+        case "voicechange": {
+            await showVoiceChangeMessage(interaction);
             break;
         }
         default: {
@@ -210,5 +271,10 @@ export const yomiage = {
         )
         .addSubcommand((subcommand) =>
             subcommand.setName("stop").setDescription("Stop reading"),
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("voicechange")
+                .setDescription("Change the voice"),
         ),
 };
