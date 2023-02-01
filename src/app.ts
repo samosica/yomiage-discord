@@ -1,5 +1,9 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { commands } from "./commands";
+import {
+    onSelectVoice,
+    VoiceChangeMessageComponents,
+} from "./commands/yomiage";
 import { config } from "./config";
 
 // References:
@@ -26,6 +30,24 @@ client.on(Events.InteractionCreate, async (interaction) => {
             return;
         }
         await command.handler(interaction);
+    } catch (e) {
+        console.error(e);
+    }
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+    try {
+        if (!interaction.isStringSelectMenu()) {
+            return;
+        }
+        if (
+            interaction.customId !==
+            VoiceChangeMessageComponents.VoiceSelectMenu
+        ) {
+            return;
+        }
+
+        await onSelectVoice(interaction);
     } catch (e) {
         console.error(e);
     }
