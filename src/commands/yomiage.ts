@@ -16,7 +16,12 @@ import {
 } from "@discordjs/voice";
 import { attachBufferToPlay } from "../utilities";
 import { askGPT3 } from "../gpt-3";
-import { changeVoice, getAvailableVoiceDescriptions, getVoice } from "../voice";
+import {
+    changeVoice,
+    getAvailableVoiceDescriptions,
+    getVoice,
+    Voice,
+} from "../voice";
 
 const buildNormalMessageHandler = (
     play: (resourceRetrieval: Promise<AudioResource | null>) => Promise<void>,
@@ -97,6 +102,14 @@ const buildMentionMessageHandler = (
     return handler;
 };
 
+const getMessageAboutVoice = (voice: Voice) => {
+    const lines = [`いまの読み上げのスタイルは${voice.name}です`];
+    if (voice.notice !== undefined) {
+        lines.push(voice.notice);
+    }
+    return lines.join("\n");
+};
+
 const startYomiage = async (interaction: ChatInputCommandInteraction) => {
     const { channel, guild } = interaction;
 
@@ -144,6 +157,7 @@ const startYomiage = async (interaction: ChatInputCommandInteraction) => {
     }
 
     await interaction.editReply("接続成功！");
+    await interaction.followUp(getMessageAboutVoice(getVoice()));
 
     const player = createAudioPlayer();
     connection.subscribe(player);
@@ -239,6 +253,7 @@ export const onSelectVoice = async (
     await interaction.editReply({
         content: `読み上げのスタイルを${voiceDesc.name}に変えました`,
     });
+    await interaction.followUp(getMessageAboutVoice(getVoice()));
 };
 
 const onYomiage = async (interaction: ChatInputCommandInteraction) => {
