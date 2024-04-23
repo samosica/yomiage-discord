@@ -1,26 +1,27 @@
 import {
+    AudioResource,
+    VoiceConnectionStatus,
+    createAudioPlayer,
+    entersState,
+    getVoiceConnection,
+    joinVoiceChannel,
+} from "@discordjs/voice";
+import {
     ActionRowBuilder,
+    ChannelType,
     ChatInputCommandInteraction,
     Message,
     SlashCommandBuilder,
     StringSelectMenuBuilder,
     StringSelectMenuInteraction,
 } from "discord.js";
-import {
-    AudioResource,
-    createAudioPlayer,
-    entersState,
-    getVoiceConnection,
-    joinVoiceChannel,
-    VoiceConnectionStatus,
-} from "@discordjs/voice";
-import { attachBufferToPlay } from "../utilities";
 import { askGPT3 } from "../gpt-3";
+import { attachBufferToPlay } from "../utilities";
 import {
+    Voice,
     changeVoice,
     getAvailableVoiceDescriptions,
     getVoice,
-    Voice,
 } from "../voice";
 
 const buildNormalMessageHandler = (
@@ -113,7 +114,7 @@ const getMessageAboutVoice = (voice: Voice) => {
 const startYomiage = async (interaction: ChatInputCommandInteraction) => {
     const { channel, guild } = interaction;
 
-    if (!guild || !channel || !channel.isVoiceBased()) {
+    if (!guild || !channel || channel.type !== ChannelType.GuildVoice) {
         await interaction.reply({
             content:
                 "`/yomiage start`コマンドはボイスチャンネルのチャット内で実行してください",

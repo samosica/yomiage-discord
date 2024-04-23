@@ -21,9 +21,7 @@ const googleTextToSpeechVoice: Voice = {
     notice: ":warning: **以降に投稿されたメッセージは外部のサーバーに送信されます**",
 };
 
-const availableVoices: ReadonlyArray<Voice> = [
-    googleTextToSpeechVoice,
-];
+const availableVoices: ReadonlyArray<Voice> = [googleTextToSpeechVoice];
 
 export const getAvailableVoiceDescriptions =
     (): ReadonlyArray<VoiceDescription> =>
