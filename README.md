@@ -67,7 +67,7 @@ yomiage-discordはDiscordに投稿されたメッセージを合成音声で読�
 7. ボイスチャンネルのチャットで`/yomiage start`と入力するとメッセージの読み上げ機能が有効になる。機能を有効にできるのはボイスチャンネルのチャットからのみで、他のテキストチャンネルやDMからは有効にならない。
 8. `/yomiage stop`と入力すると読み上げ機能が無効になる。無効にするのはどのチャンネルからでもできる
 
-#### ローカル環境で動かす
+#### ローカル環境で試す
 
 設定は`config.json`に書き込むのではなく、以下の環境変数に指定してください。
 
@@ -79,7 +79,33 @@ yomiage-discordはDiscordに投稿されたメッセージを合成音声で読�
 また、環境変数の設定には[1Password CLI](https://developer.1password.com/docs/cli/)などを使ってください。
 `EV=val`を使う方法、`.env`ファイルを使う方法は非推奨です。
 
-アプリケーションの起動は`GOOGLE_APPLICATION_CREDENTIALS=(サービスアカウントの鍵ファイル) npm run dev`でできます。ただし、環境変数の設定方法によってはコマンドの微修正が必要になることがあります。
+加えて、サービスアカウントの代わりに user credential を使用してください。user credential は次の方法で作成できます。
+
+1. 以下のコマンドを実行し、gcloud CLI で指定しているプロジェクトがテスト用のプロジェクトであることを確かめる。
+
+```sh
+gcloud config get project
+```
+
+もし違うプロジェクトが指定されている場合は`gcloud config set project (テスト用のプロジェクトID)`を実行する。
+
+2. 以下のコマンドを実行し、ブラウザで認証を行なう。
+
+```sh
+gcloud auth application-default login
+```
+
+操作を進めていくと次のような出力が得られる。
+
+```text
+Quota project "XXXXXXXX" was added to ADC which can be used by Google client libraries for billing and quota. Note that some services may still bill the project owning the resource.
+```
+
+`XXXXXXXX`がテスト用のプロジェクトであることを再度確かめる。
+
+結果として user credential が作成される。
+
+アプリケーションの起動は`npm run dev`でできます。ただし、環境変数の設定方法によってはコマンドの微修正が必要になることがあります。
 
 ## 工夫点 (備忘録)
 - 複数のコメントの音声化を同時に進める（非同期処理）
