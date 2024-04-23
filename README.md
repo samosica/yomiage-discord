@@ -41,8 +41,10 @@ yomiage-discordはDiscordに投稿されたメッセージを合成音声で読�
 最後にアプリケーションを動かします。
 
 ### アプリケーションを動かす
+
 1. このレポジトリをクローンし、作成されたディレクトリに移動する
 2. `config.json`を作成し、以下の内容を書き込む
+
 ```json
 {
     "discord": {
@@ -55,12 +57,29 @@ yomiage-discordはDiscordに投稿されたメッセージを合成音声で読�
     }
 }
 ```
+
+他のファイルに書き込むこともできます。その場合、`YOMIAGE_DISCORD_CONFIG`にそのファイルのパスを指定してください。
+
 3. `npm install`を実行する
 4. `npm run build`を実行する
 5. `npm run deploy`を実行する
 6. `GOOGLE_APPLICATION_CREDENTIALS=(サービスアカウントの鍵ファイル) npm start`を実行する
 7. ボイスチャンネルのチャットで`/yomiage start`と入力するとメッセージの読み上げ機能が有効になる。機能を有効にできるのはボイスチャンネルのチャットからのみで、他のテキストチャンネルやDMからは有効にならない。
 8. `/yomiage stop`と入力すると読み上げ機能が無効になる。無効にするのはどのチャンネルからでもできる
+
+#### ローカル環境で動かす
+
+設定は`config.json`に書き込むのではなく、以下の環境変数に指定してください。
+
+- `DISCORD_TOKEN`: Discordのトークン
+- `DISCORD_CLIENT_ID`: DiscordのクライアントID
+- `DISCORD_GUILD_ID`: DiscordのサーバーID
+- `OPENAI_API_KEY`: OpenAIのAPIキー
+
+また、環境変数の設定には[1Password CLI](https://developer.1password.com/docs/cli/)などを使ってください。
+`EV=val`を使う方法、`.env`ファイルを使う方法は非推奨です。
+
+アプリケーションの起動は`GOOGLE_APPLICATION_CREDENTIALS=(サービスアカウントの鍵ファイル) npm run dev`でできます。ただし、環境変数の設定方法によってはコマンドの微修正が必要になることがあります。
 
 ## 工夫点 (備忘録)
 - 複数のコメントの音声化を同時に進める（非同期処理）

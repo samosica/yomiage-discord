@@ -1,4 +1,6 @@
 **/*
+!scripts
+!scripts/dev.sh
 !src
 !src/**/*
 !.eslintrc.js

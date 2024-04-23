@@ -13,7 +13,8 @@
         "prebuild": "rm -r dist && mkdir dist",
         "build": "tsc",
         "deploy": "node dist/deploy.js",
-        "start": "node dist/app.js"
+        "start": "node dist/app.js",
+        "dev": "npm run build && scripts/dev.sh"
     },
     "author": "samosica <samosic4@gmail.com>",
     "license": "MIT",
