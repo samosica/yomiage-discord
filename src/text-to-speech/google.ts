@@ -12,7 +12,10 @@ export const textToSpeech = async (text: string): Promise<AudioResource> => {
     const [response] = await client.synthesizeSpeech({
         input: { text },
         voice: { languageCode: "ja-JP", name: "ja-JP-Standard-C" },
-        audioConfig: { audioEncoding: "OGG_OPUS", volumeGainDb: -1.41 /* 85% */ },
+        audioConfig: {
+            audioEncoding: "OGG_OPUS",
+            volumeGainDb: -1.41 /* 85% */,
+        },
     });
 
     if (response.audioContent == null) {

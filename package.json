@@ -4,7 +4,13 @@
     "description": "Provide a Discord bot reading comments",
     "main": "dist/index.js",
     "scripts": {
-        "eslint": "eslint .",
+        "lint": "run-s --continue-on-error lint:*",
+        "lint:tsc": "tsc --noEmit",
+        "lint:eslint": "eslint .",
+        "lint:prettier": "prettier --check .",
+        "lint-fix": "run-s --continue-on-error lint-fix:*",
+        "lint-fix:prettier": "prettier --write .",
+        "prebuild": "rm -r dist && mkdir dist",
         "build": "tsc",
         "deploy": "node dist/deploy.js",
         "start": "node dist/app.js"
@@ -28,6 +34,7 @@
         "eslint-config-airbnb-typescript": "^18.0.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-import": "^2.29.1",
+        "npm-run-all": "^4.1.5",
         "prettier": "^3.2.5",
         "typescript": "^5.4.5"
     },
