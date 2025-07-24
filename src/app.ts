@@ -18,6 +18,7 @@ const client = new Client({
     ],
 });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 client.on(Events.InteractionCreate, async (interaction) => {
     try {
         if (!interaction.isChatInputCommand()) {
@@ -35,6 +36,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 client.on(Events.InteractionCreate, async (interaction) => {
     try {
         if (!interaction.isStringSelectMenu()) {

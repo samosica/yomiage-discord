@@ -170,6 +170,7 @@ const startYomiage = async (interaction: ChatInputCommandInteraction) => {
     const mentionMessageHandler = buildMentionMessageHandler(bufferedPlay);
     const normalMessageHandler = buildNormalMessageHandler(bufferedPlay);
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     messageCollector.on("collect", async (message) => {
         if (
             message.mentions.users.some((u) =>

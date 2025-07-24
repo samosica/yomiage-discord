@@ -19,7 +19,7 @@
     "author": "samosica <samosic4@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@discordjs/voice": "^0.16.1",
+        "@discordjs/voice": "^0.18.0",
         "@google-cloud/text-to-speech": "^5.2.0",
         "discord.js": "^14.21.0",
         "fp-ts": "^2.16.5",
