@@ -55,12 +55,12 @@ const loadConfigFromEnvVars = (): Config => {
             apiKey: process.env.OPENAI_API_KEY!,
         },
     };
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */    
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 };
 
 export const config = (() => {
-    if(process.env.NODE_ENV === "development"){
-        console.log("load config from environment variables")
+    if (process.env.NODE_ENV === "development") {
+        console.log("load config from environment variables");
         return loadConfigFromEnvVars();
     }
 
